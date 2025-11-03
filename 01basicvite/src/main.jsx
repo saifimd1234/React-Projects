@@ -23,10 +23,19 @@ const AnotherElement = (
     <a href="https://google.com" target='_blank'>Visit Google</a>
 )
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-    <>
-    <App />
-    <MyApp />
-    {AnotherElement}
-    </>
+const areactElement = React.createElement(
+    'a',
+    {href: "https://google.com", target: '_blank'},
+    'click to visit google- areactElement'
 )
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+   <>
+    <div><App /></div>
+    <div><MyApp /></div>
+    <div>{AnotherElement}</div>
+    <div>{areactElement}</div>
+   </>
+
+)
+// all are in seperate div to present it in diff lines
