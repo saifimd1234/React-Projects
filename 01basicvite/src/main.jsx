@@ -18,10 +18,15 @@ function MyApp(){
         </div>
     )
 }
+// anotherElement will not work, Camel casing is mandatory in Vite
+const AnotherElement = (
+    <a href="https://google.com" target='_blank'>Visit Google</a>
+)
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <>
     <App />
     <MyApp />
+    {AnotherElement}
     </>
 )

@@ -109,3 +109,111 @@ Used for **learning** and **understanding how React works internally** — espec
 
 ✅ **In short:**
 You are building your own *mini React engine* to understand **how `ReactDOM.render()` and virtual DOMs convert JS objects into real HTML elements.**
+
+Excellent question — and you’ve caught one of the *most confusing but important* details for beginners in React. 👇
+
+---
+
+### 💡 Problem:
+
+In your code:
+
+```jsx
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <>
+    <App />
+    <MyApp />
+    AnotherElement
+  </>
+)
+```
+
+👉 `AnotherElement` **will not render**.
+Instead, React will treat it as a plain **JavaScript variable name (string)**, not as JSX content — so nothing appears.
+
+---
+
+### 🧠 Why?
+
+In JSX:
+
+* Anything **inside `{}`** is **evaluated as JavaScript**.
+* Anything **without `{}`** is treated as **JSX or text**.
+
+So, when you wrote `AnotherElement`, React didn’t know you meant the variable — it treated it like plain text.
+
+---
+
+### ✅ Fix:
+
+You need to **wrap the variable inside curly braces `{}`** so React knows to render that element:
+
+```jsx
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <>
+    <App />
+    <MyApp />
+    {AnotherElement}   {/* ✅ Correct way */}
+  </>
+)
+```
+
+---
+
+### 📘 Explanation:
+
+* `AnotherElement` is a **JSX element stored in a variable**.
+* `{AnotherElement}` tells React:
+  “Hey, insert the JSX element stored in this variable here.”
+
+---
+
+### 🧩 Full Working Code:
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.jsx'
+
+const reactElement = {
+    type: 'a',
+    props: {
+        href: "https://google.com",
+        target: '_blank'
+    },
+    children: 'Click me to visit google'
+}
+
+function MyApp(){
+    return(
+        <div>
+            <h1>Custom function and react app</h1>
+        </div>
+    )
+}
+
+const AnotherElement = (
+    <a href="https://google.com" target='_blank'>Visit Google</a>
+)
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <>
+    <App />
+    <MyApp />
+    {AnotherElement}  {/* ✅ Works now */}
+  </>
+)
+```
+
+---
+
+### 🧩 Summary for your notes:
+
+| Issue                          | Reason                      | Fix                             |
+| ------------------------------ | --------------------------- | ------------------------------- |
+| `AnotherElement` not rendering | JSX treats it as plain text | Wrap it with `{AnotherElement}` |
+| ✅ Working syntax               | `{AnotherElement}`          |                                 |
+
+---
+
+So, the tutorial’s example likely had `{AnotherElement}` — or the instructor implicitly mentioned that JSX variables must always be wrapped inside `{}` to be rendered.
