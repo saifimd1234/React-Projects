@@ -1,4 +1,4 @@
-import youtube from "./youtube"
+import Youtube from "./Youtube"
 function App() {
 
   return (
@@ -9,7 +9,7 @@ function App() {
     <div>  
       <h1>Basic Vite App</h1>
       <h1>Vite react app</h1>
-      <youtube />  
+      <Youtube />  
     </div>
   )
 // call <youtube /> doesn't works bcz filename is js instead of jsx
