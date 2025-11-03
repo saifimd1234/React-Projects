@@ -1,9 +1,11 @@
+import Youtube from "./Youtube.jsx"
+
 function App() {
   return (
-   // eslint-disable-next-line jsx-a11y/heading-has-content
-   <h1>
-    Classic React App
-   </h1>
+    <>
+      <h1>Classic React App</h1>
+      <Youtube />
+    </>
   );
 }
 
