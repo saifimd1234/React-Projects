@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './App.css'
 
 function App() {
-  const counter = 15
+  let counter = 15
   
   const addValue = () => {
     counter = counter + 1
