@@ -189,3 +189,98 @@ React introduced a **virtual DOM + state system** so:
 > fixing the old problem where the screen didn’t match the data behind it.
 
 ---
+
+## 🔎 What’s happening
+
+When you do this:
+
+```js
+setCounter(counter + 1)
+setCounter(counter + 1)
+setCounter(counter + 1)
+setCounter(counter + 1)
+```
+
+each `setCounter` uses the **same current `counter` value** (the one captured when the handler started). React **batches** those updates together and schedules **one re-render**. Because every call computed the *same* new value (`counter + 1`), the final result is effectively **only +1**.
+
+---
+
+## 🧠 Why batching?
+
+React groups multiple state updates that happen during the same event (or same tick) to avoid repeated re-renders — this is called **batching**. It improves performance by doing one render instead of many.
+
+In modern React (React 18+) automatic batching is broader (event handlers, promises, timeouts, etc.), but the key point for you: **multiple setState calls that compute new state from the old state must use the functional updater form** to avoid stale reads.
+
+---
+
+## ✅ Correct approach — functional updater
+
+Use the functional form `setCounter(prev => prev + 1)`. That way each queued update applies to the latest value:
+
+```js
+const addValue = () => {
+  setCounter(prev => prev + 1)
+  setCounter(prev => prev + 1)
+  setCounter(prev => prev + 1)
+  setCounter(prev => prev + 1)
+}
+```
+
+This will increase the counter by **4**.
+
+Why it works: each `prev` is taken from the state as updated by prior queued updates, not from the stale `counter` variable.
+
+---
+
+## Alternative (simpler) — update by 4 at once
+
+If you want +4 in one go, you can also:
+
+```js
+setCounter(prev => prev + 4)
+```
+
+This is clearer and avoids multiple calls.
+
+---
+
+## Notes on `console.log` and timing
+
+* `setCounter` is **asynchronous** (it schedules a state change).
+* `console.log(counter)` inside the handler will still show the **old** value. To see the new value, use `useEffect` that depends on `counter`:
+
+```js
+useEffect(() => {
+  console.log("counter updated:", counter)
+}, [counter])
+```
+
+---
+
+## Optional: force immediate update (rare)
+
+If you absolutely need the update to be applied synchronously (not recommended as default), React exposes `flushSync` from `'react-dom'`:
+
+```js
+import { flushSync } from 'react-dom';
+
+const add = () => {
+  flushSync(() => setCounter(c => c + 1));
+  // now counter updated synchronously for the rest of this tick
+}
+```
+
+Use `flushSync` sparingly — it breaks batching and can harm performance.
+
+---
+
+## Short summary for your notes
+
+* **Batching** groups updates and causes one re-render for multiple `setState` calls.
+* Calling `setCounter(counter + 1)` multiple times uses the same stale `counter` value → result +1.
+* **Use functional updater** `setCounter(prev => prev + 1)` to queue increments safely; repeating it 4 times gives +4.
+* Or use `setCounter(prev => prev + 4)` to update by 4 in one call.
+* `setState` is async — use `useEffect` to observe updated values.
+* `flushSync` forces synchronous updates (use rarely).
+
+---
