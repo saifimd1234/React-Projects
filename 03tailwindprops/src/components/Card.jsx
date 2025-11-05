@@ -15,13 +15,13 @@ function Card() {
 
 function Card({ title, content, imageUrl }) {
   return (
-    <div className="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="w-64 h-64 bg-white rounded-lg shadow-md flex flex-col overflow-hidden mx-2">
       {imageUrl && (
-        <img src={imageUrl} alt={title} className="w-full h-auto object-cover" />
+        <img src={imageUrl} alt={title} className="w-full h-32 object-cover" />
       )}
-      <div className="p-4">
-        <h2 className="text-xl font-semibold mb-2">{title}</h2>
-        <p className="text-gray-700 text-base">{content}</p>
+      <div className="p-4 flex-1 flex flex-col">
+        <h2 className="text-lg font-bold text-gray-800 mb-2">{title}</h2>
+        <p className="text-gray-700 text-sm flex-1 overflow-auto max-h-24 pr-2 pb-4 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">{content}</p>
       </div>
     </div>
   );
